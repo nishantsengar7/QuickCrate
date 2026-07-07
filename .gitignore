@@ -1,0 +1,18 @@
+# Environment / secrets
+.env
+
+# Python Caches
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Local database & logs
+requests.db
+requests.log
+
+# Local vector store storage
+qdrant_storage/
+
+# BM25 pickle (dynamic fallback in retrieval.py)
+bm25_index.pkl

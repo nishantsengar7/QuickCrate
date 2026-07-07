@@ -1,0 +1,86 @@
+﻿[
+  {
+    "id": "orders-001",
+    "category": "orders",
+    "title": "How do I place an order on QuickCrate?",
+    "body": "Placing an order on QuickCrate is straightforward. Open the QuickCrate app or visit our website and browse or search for the items you need. Add products to your cart by tapping the '+' button next to each item. When you're ready, tap the cart icon in the top-right corner to review your selections. Check that quantities and product variants (size, weight, etc.) are correct, then tap 'Proceed to Checkout'. You'll be prompted to confirm your delivery address and choose a payment method. QuickCrate supports UPI, debit/credit cards, net banking, and cash on delivery. After entering your payment details, tap 'Place Order'. You'll receive an order confirmation via SMS and email within a few seconds. If you don't get a confirmation, check your spam folder or visit 'My Orders' in the app to verify the order status. Orders placed before the last slot cut-off for your area will be delivered the same day.",
+    "tags": ["place order", "checkout", "how to order", "cart"]
+  },
+  {
+    "id": "orders-002",
+    "category": "orders",
+    "title": "Can I modify or cancel my order after placing it?",
+    "body": "You can modify or cancel your order within a short window after placing it. QuickCrate begins processing orders almost immediately to meet our fast delivery promise, so the cancellation window is typically 2 minutes from order confirmation. To cancel, go to 'My Orders', select the order, and tap 'Cancel Order'. If the window has passed, the cancel button will be greyed out. Once the order is picked and dispatched, cancellations are no longer possible from the app. In that scenario, you can refuse delivery at the door and a refund will be initiated automatically. For modifications (adding or removing items), you must cancel the current order and place a new one, since in-flight edits are not supported. If you accidentally ordered the wrong item, our returns process makes it easy to exchange or refund after delivery.",
+    "tags": ["cancel order", "modify order", "edit order", "order window"]
+  },
+  {
+    "id": "orders-003",
+    "category": "orders",
+    "title": "Why was my order automatically cancelled?",
+    "body": "QuickCrate may automatically cancel an order for several reasons. The most common is a payment failure — if your card or UPI transaction could not be processed, the order is cancelled and any pending authorization is released within 3-5 business days. Another reason is stock unavailability: if one or more items in your order go out of stock between the time you placed the order and when it was picked, the entire order may be cancelled (or partially fulfilled, depending on your settings under 'Substitution Preferences'). Rarely, cancellations occur due to a delivery address being outside our serviceable zone. You'll receive an SMS and in-app notification explaining the specific reason. If the cancellation was due to a payment issue, try re-ordering with a different payment method. If stock is the problem, you can enable restock alerts on the product page.",
+    "tags": ["auto cancel", "order cancelled", "payment failure", "out of stock"]
+  },
+  {
+    "id": "orders-004",
+    "category": "orders",
+    "title": "What is the minimum order value on QuickCrate?",
+    "body": "QuickCrate does not impose a minimum order value for most areas, which means you can order even a single item. However, orders below ₹99 may incur a small handling fee of ₹10 to cover packaging and operational costs. This fee is clearly displayed at checkout before you confirm the order, so there are no surprises. QuickCrate Plus subscribers enjoy waived handling fees on all orders, regardless of cart value. In certain high-demand or remote delivery zones, a minimum order value of ₹149 may apply; this will be indicated on your home screen or at checkout if it applies to your location. We recommend adding the QuickCrate minimum-order banner to your cart view settings so you always know exactly how much more to add to avoid the handling fee.",
+    "tags": ["minimum order", "handling fee", "order value", "small order"]
+  },
+  {
+    "id": "orders-005",
+    "category": "orders",
+    "title": "How do I reorder items from a previous order?",
+    "body": "Reordering is fast on QuickCrate. Navigate to 'My Orders' from the bottom navigation bar, find the order you want to repeat, and tap 'Reorder'. The app will add all the same items to your current cart. You'll see a screen showing which items are in stock and which are currently unavailable. Unavailable items will be listed with an 'Out of stock' tag and won't be added to your cart automatically. You can swap them manually from the catalog before checkout. If you often reorder the same basket, consider saving it as a 'Saved List' (tap the bookmark icon on any product detail page) so you can recreate it with one tap. QuickCrate Plus subscribers can set up scheduled recurring orders for their weekly staples.",
+    "tags": ["reorder", "repeat order", "order history", "saved list"]
+  },
+  {
+    "id": "orders-006",
+    "category": "orders",
+    "title": "Can I schedule a delivery for a later time?",
+    "body": "Yes, QuickCrate offers scheduled delivery in most serviceable zones. During checkout, after confirming your cart and address, you'll see a 'Delivery Slot' selector. Available slots are shown in 30-minute windows for the current day and up to 3 days in advance. Choose your preferred slot and proceed with payment. Scheduled orders are treated with the same priority as express orders once the slot window opens. Note that slot availability can change dynamically based on demand in your area; booking early ensures you get your preferred time. If you're a QuickCrate Plus member, you get priority slot access during peak hours. To reschedule after placing the order, go to 'My Orders', tap the order, and use 'Change Slot' (available up to 1 hour before the slot opens).",
+    "tags": ["scheduled delivery", "delivery slot", "later delivery", "book slot"]
+  },
+  {
+    "id": "orders-007",
+    "category": "orders",
+    "title": "What happens if an item in my order is out of stock?",
+    "body": "Occasionally an item shown as available at the time of ordering becomes unavailable by the time it is being picked. QuickCrate handles this with a 'Substitution Preference' feature. If you've enabled substitutions in your account settings, our pickers will replace the unavailable item with the closest available alternative (same brand or same product type, nearest weight/size). You'll be notified by push notification if a substitution is made. The substituted item is billed at the original item's price; if it is cheaper, the difference is refunded; if it is more expensive, you pay only the original price. If substitution is disabled, the out-of-stock item is simply removed and you are refunded for it. You can manage your substitution preference under Account → Order Preferences.",
+    "tags": ["out of stock", "substitution", "item unavailable", "replacement"]
+  },
+  {
+    "id": "orders-008",
+    "category": "orders",
+    "title": "How do I use the QuickCrate barcode scanner to add items?",
+    "body": "QuickCrate's in-app barcode scanner lets you quickly add physical items to your cart by scanning their packaging. Open the app and tap the scanner icon (📷) in the search bar. Point your camera at the barcode or QR code on the product. If the item is available in QuickCrate's catalog, it will be added to your cart instantly. If the item is not found, you'll see a 'Not available' message; you can then try searching by name manually. The scanner also works with grocery lists — scan multiple items sequentially without closing the scanner between scans. This feature is particularly useful for quickly reordering pantry staples directly from your kitchen shelf. Make sure your phone camera has sufficient light for accurate scanning.",
+    "tags": ["barcode scanner", "scan product", "add to cart", "quick add"]
+  },
+  {
+    "id": "orders-009",
+    "category": "orders",
+    "title": "Can I order for someone else at a different address?",
+    "body": "Yes, QuickCrate allows you to add multiple delivery addresses to your account and place orders to any of them. This is handy for gifting, or sending essentials to family members in a different part of the city. To add a new address, go to Account → Saved Addresses → Add New Address. You can label each address (e.g., 'Mom's Place', 'Office'). At checkout, tap 'Change Address' to switch the delivery destination. Note that pricing, availability, and delivery time estimates may differ by location because QuickCrate's dark-store coverage is zone-specific. If the alternate address is outside a serviceable zone, you'll see an 'Out of delivery area' message. Orders placed for a different address still use your saved payment methods and you receive all notifications.",
+    "tags": ["different address", "gift delivery", "multiple addresses", "send to someone"]
+  },
+  {
+    "id": "orders-010",
+    "category": "orders",
+    "title": "Why is my order showing 'Awaiting Confirmation' for a long time?",
+    "body": "An order stuck in 'Awaiting Confirmation' usually indicates a payment verification delay. When you pay via UPI or net banking, QuickCrate waits for a payment gateway confirmation before processing the order. This normally takes under 30 seconds, but can occasionally take up to 10 minutes if the bank or payment gateway is experiencing delays. Do not attempt to re-place the order during this window — it may result in double charging. Instead, wait 10 minutes and refresh the 'My Orders' page. If the status still hasn't updated, check your bank statement or UPI app to see if the amount was debited. If debited but order not confirmed, use 'Report a Payment Issue' in the app and our system will reconcile it within 2 hours and either confirm the order or issue a full refund.",
+    "tags": ["awaiting confirmation", "order stuck", "payment delay", "UPI delay"]
+  },
+  {
+    "id": "orders-011",
+    "category": "orders",
+    "title": "Is there an order history limit? How far back can I see past orders?",
+    "body": "QuickCrate stores your complete order history indefinitely within the app. You can scroll back through all past orders in 'My Orders', which are listed in reverse chronological order. For easier navigation, use the filter and search options at the top of the 'My Orders' page — you can filter by date range, category, or payment status. If you need a detailed order history for accounting or tax purposes (e.g., for business accounts), you can export a CSV or PDF statement from Account → Order History → Export. The export covers up to the past 2 years per request. For longer periods, submit a request through customer support and we'll generate an extended report within 3 business days.",
+    "tags": ["order history", "past orders", "export orders", "order list"]
+  },
+  {
+    "id": "orders-012",
+    "category": "orders",
+    "title": "What are QuickCrate's operating hours?",
+    "body": "QuickCrate operates 24 hours a day, 7 days a week, including public holidays, in most major cities. Delivery slots are typically available from 6 AM to midnight, though in some areas late-night slots (midnight to 6 AM) are also offered. Operating hours may vary slightly by city and dark-store location — your app will show only the slots available for your specific pin code. During severe weather events (heavy rain, storms, cyclones), QuickCrate may temporarily pause deliveries for rider safety; you'll receive an in-app notification if this affects your order. Orders placed during a pause are queued and fulfilled as soon as conditions allow. During major festivals, QuickCrate ramps up capacity to maintain delivery speed, though some delays of 10-20 minutes above the ETA are possible.",
+    "tags": ["operating hours", "delivery hours", "24/7", "working hours", "holiday delivery"]
+  }
+]

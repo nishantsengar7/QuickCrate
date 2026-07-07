@@ -1,0 +1,86 @@
+﻿[
+  {
+    "id": "delivery-001",
+    "category": "delivery",
+    "title": "How fast does QuickCrate deliver?",
+    "body": "QuickCrate promises ultra-fast delivery, targeting 10-30 minutes for most orders in core serviceable zones. Our dark-store model means inventory is stored in micro-warehouses placed strategically within 2-3 km of dense residential areas, enabling riders to complete deliveries quickly. The estimated delivery time (EDT) shown at checkout is calculated in real time based on your distance from the nearest dark store, current order volume, and traffic conditions. During peak hours (evening 6-9 PM) or bad weather, EDT may extend to 45 minutes. QuickCrate Plus members receive priority dispatch, which can shave 5-8 minutes off the standard EDT. You'll see a live map tracking your rider once the order is dispatched.",
+    "tags": ["delivery time", "how fast", "EDT", "10 minutes", "express delivery"]
+  },
+  {
+    "id": "delivery-002",
+    "category": "delivery",
+    "title": "How do I track my delivery in real time?",
+    "body": "Once your order is dispatched, you'll receive a push notification with a 'Track Order' link. Tap it to open the live tracking map, which shows your rider's current location updated every 15 seconds. The map also displays the estimated time remaining, the rider's name, and a masked phone number you can call if needed. You can share the live tracking link with household members by tapping the share icon on the tracking screen — no app download required for them. If the map doesn't load, check your internet connection. Tracking is available from dispatch until the order is marked delivered. After delivery, you'll see a delivery confirmation screen with a timestamp. Order tracking history is stored in 'My Orders' for reference.",
+    "tags": ["track order", "live tracking", "real-time tracking", "rider location"]
+  },
+  {
+    "id": "delivery-003",
+    "category": "delivery",
+    "title": "What areas does QuickCrate currently serve?",
+    "body": "QuickCrate currently serves over 30 cities across India, with coverage expanding monthly. Within each city, delivery is limited to pin codes serviced by our dark stores. To check if your address is covered, enter your pin code on the QuickCrate homepage or app; you'll immediately see whether delivery is available and what the approximate EDT is. If your pin code is not yet covered, you can join the waitlist for your area — we use waitlist data to prioritize new dark-store launches. Pin code coverage maps are updated in the app automatically; there's no need to reinstall the app when new areas are added. For the latest list of serviceable cities, visit our website under 'Delivery Coverage'.",
+    "tags": ["delivery area", "serviceable zone", "coverage", "pin code", "cities"]
+  },
+  {
+    "id": "delivery-004",
+    "category": "delivery",
+    "title": "Why is my order delayed beyond the estimated time?",
+    "body": "Delays beyond the estimated delivery time can happen for several reasons. During high-demand windows (festivals, bad weather, late evenings), our riders handle more orders than usual, which can push ETDs by 10-30 minutes. Traffic congestion, road closures, or accidents in your area may also slow delivery. On the tracking map, you'll see an updated ETA in real time. If your order is more than 20 minutes past the original ETA, you'll automatically receive a delay notification and a ₹30 QuickCrate credit as compensation. If the order is more than 45 minutes late without delivery, you can raise a 'Delivery Issue' from the order detail page and a support agent will assist you. In rare cases, your order may be reassigned to a new rider if the first rider encounters an issue.",
+    "tags": ["delayed delivery", "late order", "ETA exceeded", "delivery delay"]
+  },
+  {
+    "id": "delivery-005",
+    "category": "delivery",
+    "title": "Can I change my delivery address after placing an order?",
+    "body": "Changing a delivery address after an order is placed is only possible within the 2-minute cancellation window. Once the order starts being picked, the delivery address is locked. This is because our routing system assigns a rider based on the original address, and changing it mid-delivery would disrupt logistics. If you've entered the wrong address, cancel the order immediately from 'My Orders → Cancel Order' and reorder to the correct address. If the cancellation window has closed, contact support using the in-app chat — in some cases, if the rider has not yet been dispatched, our operations team may be able to intercept and reroute. However, this is not guaranteed. Always double-check your delivery address before tapping 'Place Order'.",
+    "tags": ["change address", "wrong address", "delivery address", "address after order"]
+  },
+  {
+    "id": "delivery-006",
+    "category": "delivery",
+    "title": "What should I do if my order is marked delivered but I didn't receive it?",
+    "body": "If your order is marked as delivered but you haven't received it, act quickly — ideally within 30 minutes of the delivery timestamp. Go to 'My Orders', select the affected order, and tap 'Report an Issue → Item Not Received'. Our system will log a complaint and automatically trigger an investigation. In most cases, a support agent reviews the rider's delivery proof (photo of drop-off) and GPS trail within 15 minutes. If the investigation confirms non-delivery, a full refund or free re-delivery is initiated. Do not wait until the next day to report, as evidence becomes harder to assess. You can also call the rider using the masked number visible in the tracking screen if delivery was recent. If the masked number is unavailable, contact support directly via in-app chat.",
+    "tags": ["not received", "marked delivered", "missing order", "delivery proof"]
+  },
+  {
+    "id": "delivery-007",
+    "category": "delivery",
+    "title": "Does QuickCrate deliver to gated communities and high-rise buildings?",
+    "body": "Yes, QuickCrate delivers to gated communities, apartments, and high-rise buildings. When adding your address, use the 'Landmark / Delivery Instructions' field to provide gate codes, tower numbers, floor information, or security desk instructions. Our riders are trained to follow these notes carefully. For buildings with strict visitor policies, consider using the 'Deliver to lobby/security desk' option, which instructs the rider to hand the order to the front desk. If your building requires residents to come down for pickup, riders will call you upon arrival using the masked number. In case of access issues, the rider will wait up to 5 minutes before returning the order to the dark store, after which a re-delivery or refund can be arranged.",
+    "tags": ["gated community", "apartment", "high rise", "building delivery", "delivery instructions"]
+  },
+  {
+    "id": "delivery-008",
+    "category": "delivery",
+    "title": "Can I request a contactless delivery?",
+    "body": "Contactless delivery is available and encouraged for health and safety reasons. To enable it, go to Account → Delivery Preferences → Contactless Delivery and toggle it on. Alternatively, you can activate it per order in the 'Delivery Instructions' field at checkout by typing 'Please leave at door'. When contactless is active, the rider will place your order at your doorstep or designated spot, take a photo as proof of delivery, and mark the order delivered without knocking. You'll receive a push notification with the delivery photo. For payments, contactless delivery requires a non-cash payment method (UPI, card, wallet) since cash transactions require the rider-customer handoff. If you prefer, you can also specify a nearby spot like 'leave with security desk' in the delivery instructions.",
+    "tags": ["contactless delivery", "leave at door", "no-touch delivery", "safe delivery"]
+  },
+  {
+    "id": "delivery-009",
+    "category": "delivery",
+    "title": "What if my rider calls me but I miss the call?",
+    "body": "If you miss a call from your rider, don't worry. The rider will attempt to call twice using the masked number shown in the tracking screen. You can call back on that number — it remains active for 30 minutes after the first attempt. Alternatively, use the in-app chat with the rider, accessible from the tracking screen by tapping the chat bubble icon. Riders are instructed to wait at your location for up to 5 minutes. If they cannot reach you and delivery is not possible, the order is returned to the dark store. You'll receive a 'Delivery Attempted' notification, after which you can either schedule a re-delivery (within 2 hours at no additional charge) or request a full refund. Keep your phone available near your delivery window to avoid missing the rider.",
+    "tags": ["missed call", "rider call", "delivery attempted", "contact rider"]
+  },
+  {
+    "id": "delivery-010",
+    "category": "delivery",
+    "title": "Are QuickCrate deliveries temperature-controlled for perishables?",
+    "body": "QuickCrate uses insulated delivery bags for all orders containing fresh produce, dairy, frozen items, and temperature-sensitive products. Our dark stores maintain separate refrigerated and frozen sections to ensure cold-chain integrity from storage to pickup. Riders are equipped with thermal bags that keep products within the safe temperature range for up to 60 minutes in transit. For frozen items specifically, the bags include gel ice packs. Because our deliveries are ultra-fast (typically under 30 minutes), this is usually more than sufficient. If you receive a fresh or frozen item that appears to be improperly stored on delivery (e.g., ice cream melted, vegetables wilted), report it immediately via 'Report Item Issue' and we'll issue a replacement or refund. We take cold-chain compliance seriously.",
+    "tags": ["temperature controlled", "cold chain", "perishables", "frozen delivery", "fresh produce"]
+  },
+  {
+    "id": "delivery-011",
+    "category": "delivery",
+    "title": "How does QuickCrate handle delivery during rain or extreme weather?",
+    "body": "Rider safety is our top priority during adverse weather conditions. During light to moderate rain, deliveries continue normally, as riders are equipped with rain gear. During heavy rain, storms, or other severe weather events, QuickCrate may temporarily pause deliveries in affected zones. You'll receive an in-app notification if your area is under a delivery pause. Orders already dispatched will be completed if safely possible; otherwise, they are returned and fully refunded. During pauses, you'll see a 'Temporarily Unavailable' banner on the home screen. Once the weather improves, deliveries resume automatically and your queued order (if any) will be processed. We recommend checking the app home screen for service status during monsoon season or weather alerts.",
+    "tags": ["rain delivery", "weather delay", "storm", "delivery pause", "rider safety"]
+  },
+  {
+    "id": "delivery-012",
+    "category": "delivery",
+    "title": "Can I tip my delivery rider?",
+    "body": "Yes, you can tip your QuickCrate rider both before and after delivery. Before placing an order, you'll see a 'Add Tip for Rider' option at checkout with suggested amounts (₹10, ₹20, ₹50) or a custom field. 100% of tips go directly to the rider and are paid out with their weekly earnings. After delivery, if you want to tip based on your experience, go to 'My Orders', select the completed order, and tap 'Rate & Tip'. The post-delivery tipping window stays open for 24 hours. Tips can be paid via any digital payment method or included in a cash-on-delivery payment. Riders also appreciate positive ratings — a high rating directly affects their performance bonuses. We encourage tipping during harsh weather or late-night deliveries when riders go the extra mile.",
+    "tags": ["tip rider", "delivery tip", "rate rider", "rider bonus"]
+  }
+]

@@ -1,0 +1,79 @@
+﻿[
+  {
+    "id": "payments-001",
+    "category": "payments",
+    "title": "What payment methods does QuickCrate accept?",
+    "body": "QuickCrate accepts a wide range of payment methods to make checkout convenient. These include UPI (Google Pay, PhonePe, Paytm, BHIM, and any UPI-enabled app), debit and credit cards (Visa, Mastercard, RuPay, Amex), net banking from all major Indian banks, digital wallets (Paytm Wallet, Amazon Pay, Mobikwik), and Cash on Delivery (COD). QuickCrate Wallet is also available — you can add money to it for instant one-tap checkout. Buy Now Pay Later (BNPL) options via Simpl and LazyPay are supported at checkout. For business accounts, invoice-based monthly billing is available. The available payment methods at checkout may vary slightly by city or order type. COD is available for orders up to ₹2,000.",
+    "tags": ["payment methods", "UPI", "credit card", "cash on delivery", "COD", "wallet"]
+  },
+  {
+    "id": "payments-002",
+    "category": "payments",
+    "title": "My payment failed but money was deducted from my account. What do I do?",
+    "body": "A payment failure with a successful bank deduction is usually caused by a timeout between the payment gateway and QuickCrate's server. In this case, the deducted amount is an authorization hold, not a final charge. Most banks automatically release the hold within 3-5 business days if the payment is not captured. To speed this up, go to 'My Orders' and check if the order is listed. If the order exists (even in 'failed' status), tap 'Report a Payment Issue'. Our finance team will manually reconcile the transaction within 2 hours and either confirm the order or initiate a refund. If the order does not appear, the payment was likely not captured — your bank will auto-reverse it. For UPI payments, you can also raise a dispute through your UPI app.",
+    "tags": ["payment failed", "money deducted", "failed transaction", "payment issue", "refund"]
+  },
+  {
+    "id": "payments-003",
+    "category": "payments",
+    "title": "How do I add or remove a saved payment method?",
+    "body": "To manage your saved payment methods, go to Account → Payment Methods. Here you'll see all your saved cards, UPI IDs, and wallets. To add a new card, tap 'Add Card' and enter your card details; QuickCrate uses RBI-compliant tokenization (Card-on-File Tokenisation, or CoFT) to store your card securely — your actual card number is never stored on our servers. To remove a saved card, tap the card and select 'Delete'. For UPI IDs, tap 'Add UPI' and verify with your UPI PIN. Removing a UPI ID removes it from QuickCrate's stored list, but does not affect your UPI app. Wallets are linked or unlinked through the respective wallet app. Your default payment method is indicated by a star; tap any method and select 'Set as Default' to change it.",
+    "tags": ["saved payment", "add card", "remove card", "payment methods", "UPI ID"]
+  },
+  {
+    "id": "payments-004",
+    "category": "payments",
+    "title": "How does the QuickCrate Wallet work?",
+    "body": "The QuickCrate Wallet is a prepaid digital balance stored within your QuickCrate account. You can add money to it using any payment method (UPI, card, net banking) in amounts from ₹100 to ₹10,000 per top-up. At checkout, your wallet balance is automatically applied to the order total. If the order amount exceeds your wallet balance, you can pay the remaining amount with any other method. Wallet funds never expire and can be used for any order, including COD orders (to reduce the cash amount due). Refunds from cancelled orders or returns are credited back to your QuickCrate Wallet by default for instant availability; you can opt for a bank transfer refund instead (takes 5-7 business days). Wallet balances are non-transferable between accounts.",
+    "tags": ["QuickCrate wallet", "wallet balance", "add money", "wallet refund", "prepaid"]
+  },
+  {
+    "id": "payments-005",
+    "category": "payments",
+    "title": "When will I get my refund after cancelling or returning an order?",
+    "body": "Refund timelines depend on the payment method you used. If you paid with your QuickCrate Wallet, the refund is instant — it appears in your wallet balance within seconds of the cancellation or return approval. For UPI payments, refunds typically arrive within 24-48 hours. For credit and debit cards, the refund is initiated within 24 hours on our side, but your bank may take 5-7 business days to credit it to your account, depending on their processing cycle. Net banking refunds take 3-5 business days. For COD orders that are returned, the refund is issued exclusively to your QuickCrate Wallet (since there's no digital payment trail). You'll receive an SMS and in-app notification as soon as the refund is initiated, along with an estimated arrival date.",
+    "tags": ["refund timeline", "refund when", "refund days", "cancellation refund", "return refund"]
+  },
+  {
+    "id": "payments-006",
+    "category": "payments",
+    "title": "Is it safe to save my card on QuickCrate?",
+    "body": "Yes, it is safe to save your card on QuickCrate. We comply with RBI's Card-on-File Tokenisation (CoFT) mandate, which means your actual 16-digit card number is never stored on our servers. Instead, we store a unique token issued by your card network (Visa, Mastercard, RuPay), which is useless if intercepted. All transactions are secured by 3D Secure (OTP-based) authentication and TLS 1.3 encryption in transit. Our payment infrastructure is PCI DSS Level 1 certified, the highest level of card security compliance. Additional security features include device binding (a new device must be verified before using saved cards) and optional transaction PIN/biometric locks for QuickCrate Wallet. You can delete saved cards at any time from Account → Payment Methods.",
+    "tags": ["card safety", "save card", "CoFT", "PCI DSS", "payment security"]
+  },
+  {
+    "id": "payments-007",
+    "category": "payments",
+    "title": "Can I split payment between multiple methods?",
+    "body": "Yes, QuickCrate supports partial payment splitting between your QuickCrate Wallet and one other payment method. For example, if your order total is ₹450 and your wallet has ₹200, you can use ₹200 from the wallet and pay the remaining ₹250 via UPI or card. This split is calculated automatically — the wallet balance is applied first and the remainder is charged to your secondary method. However, splitting between two external payment methods (e.g., half on one card and half on another) is not currently supported. BNPL providers like Simpl and LazyPay can also be combined with wallet balance. To maximize your savings, load your wallet with cashback rewards and referral credits and use it as your primary payment source.",
+    "tags": ["split payment", "multiple payment", "wallet + UPI", "partial payment"]
+  },
+  {
+    "id": "payments-008",
+    "category": "payments",
+    "title": "Are there any transaction charges or convenience fees?",
+    "body": "QuickCrate does not charge convenience fees on most payment methods, including UPI, wallets, and net banking. However, credit card payments may attract a convenience fee of 1.5% of the order value, which will be clearly shown at checkout before you confirm. Debit cards have no convenience fee. COD orders have no additional payment fee but may have a handling fee if the order is below ₹99. BNPL providers like Simpl or LazyPay may apply their own service charges — these are displayed by the respective provider during the payment flow. QuickCrate Wallet top-ups via credit card also carry the 1.5% fee. To avoid all fees, use UPI or your QuickCrate Wallet balance for payment.",
+    "tags": ["transaction fee", "convenience fee", "credit card fee", "charges", "COD fee"]
+  },
+  {
+    "id": "payments-009",
+    "category": "payments",
+    "title": "How do I download an invoice or payment receipt?",
+    "body": "QuickCrate generates a GST-compliant digital invoice for every order. To download it, go to 'My Orders', select the order, and tap 'Download Invoice' (PDF format). The invoice includes a breakdown of all items, applicable taxes (GST), delivery charges, discounts, and the total amount paid. For GST input credit, business account holders can enter their GSTIN in Account → Business Profile; once verified, all future invoices will include your GSTIN for ITC claims. If you need invoices for past orders (before you added your GSTIN), you can request retroactive GST invoices through customer support for orders within the past 6 months. Invoices are also emailed to your registered address within 30 minutes of order delivery.",
+    "tags": ["invoice", "receipt", "download invoice", "GST invoice", "tax invoice"]
+  },
+  {
+    "id": "payments-010",
+    "category": "payments",
+    "title": "What is QuickCrate's Buy Now Pay Later (BNPL) option?",
+    "body": "QuickCrate integrates with BNPL providers Simpl and LazyPay, allowing you to buy now and pay at the end of the month or in installments. To use BNPL, select Simpl or LazyPay at checkout. If you're a first-time user, you'll be redirected to the provider's app to set up your account and get a credit limit approved — this takes about 2 minutes. Once approved, future orders can be charged to your BNPL account with one tap. Your purchases accumulate and are billed at the end of the billing cycle, typically the 1st of each month. No interest is charged if you pay on time; late payments may attract fees from the BNPL provider. BNPL is subject to credit assessment and may not be available to all users. QuickCrate is not responsible for BNPL provider terms.",
+    "tags": ["BNPL", "buy now pay later", "Simpl", "LazyPay", "pay later", "installment"]
+  },
+  {
+    "id": "payments-011",
+    "category": "payments",
+    "title": "Why was my UPI payment declined even though I have sufficient balance?",
+    "body": "UPI payment declines despite sufficient balance can occur for several reasons. The most common are: exceeding the per-transaction limit (most banks cap UPI transactions at ₹1 lakh per transaction), using an inactive or expired UPI VPA, bank server downtime, or a mismatch between the UPI PIN and what's registered with your bank. Occasionally, UPI payments fail due to NPCI network congestion, especially during peak hours. To troubleshoot: first check if your UPI app shows the transaction in its history (failed vs. pending). If the VPA is expired, re-register it in your UPI app. If the bank server is down, wait 10 minutes and try again. For persistent issues, switching to a different UPI app (e.g., from GPay to PhonePe) often resolves them, as they may use different bank endpoints.",
+    "tags": ["UPI declined", "UPI failed", "payment declined", "UPI error", "bank error"]
+  }
+]

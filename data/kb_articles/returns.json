@@ -1,0 +1,79 @@
+﻿[
+  {
+    "id": "returns-001",
+    "category": "returns",
+    "title": "What is QuickCrate's return and refund policy?",
+    "body": "QuickCrate offers a hassle-free return policy for most product categories. Fresh produce, dairy, and perishable items must be reported for return within 24 hours of delivery. Packaged food, household essentials, and personal care products can be returned within 7 days of delivery, provided they are unused and in original packaging. Electronics and appliances carry a 7-day replacement guarantee (not a refund) if the product is defective. Non-returnable categories include opened food products (unless defective), intimate apparel, and customized items. To initiate a return, go to 'My Orders', tap the order, select the item, and choose 'Return / Report Issue'. Refunds are processed once the return is verified, with timelines varying by payment method (instant for wallet, 5-7 days for cards).",
+    "tags": ["return policy", "refund policy", "returns", "7 days", "non-returnable"]
+  },
+  {
+    "id": "returns-002",
+    "category": "returns",
+    "title": "How do I initiate a return for a damaged or wrong item?",
+    "body": "If you received a damaged item or the wrong product was delivered, you can report it directly from the app without waiting for a courier pick-up. Go to 'My Orders', select the order, find the specific item, and tap 'Report an Issue'. Choose 'Damaged Item' or 'Wrong Item' from the menu and upload a clear photo of the product. This photo helps our quality team process your claim faster and is usually the only step required — you do not need to ship the item back in most cases. Once submitted, your claim is reviewed within 30 minutes. If approved, a replacement will be dispatched with the next available delivery slot or a full refund will be initiated, based on your preference. The damaged or wrong item will be collected by the next available rider.",
+    "tags": ["damaged item", "wrong item", "incorrect product", "return damaged", "report issue"]
+  },
+  {
+    "id": "returns-003",
+    "category": "returns",
+    "title": "Can I return a product if I simply changed my mind?",
+    "body": "Yes, QuickCrate accepts 'change of mind' returns for eligible product categories, provided the item is unopened, unused, and returned within 7 days of delivery. To initiate, go to 'My Orders → Return Item → Reason: Changed my mind'. You will need to keep the item in its original packaging. A return rider will be scheduled to collect the item from your address, usually within 2 hours during business hours. Once the item is collected and inspected, a refund is issued to your original payment method (or QuickCrate Wallet for faster processing). Change of mind returns are not accepted for perishables, opened products, or items explicitly marked 'Final Sale'. Frequent unjustified returns (more than 3 per month) may trigger a review of your account.",
+    "tags": ["change of mind", "return product", "return unopened", "no reason return"]
+  },
+  {
+    "id": "returns-004",
+    "category": "returns",
+    "title": "How long does a return pick-up take?",
+    "body": "After you submit a return request, a return pick-up slot is scheduled automatically based on rider availability in your area. In most cases, pick-up happens within 2-4 hours of request submission during business hours (9 AM - 9 PM). You'll receive a notification with the expected pick-up window and the rider's details. Make sure the item is packed securely (original packaging preferred) and placed near the door at the time of pick-up. Once the rider collects the item, you'll receive a confirmation SMS with a return tracking ID. The refund is processed after the item reaches the dark store and passes quality inspection, which typically takes 2-4 hours. If your return pick-up is not completed within 24 hours, contact support to reschedule.",
+    "tags": ["return pick-up", "pick-up time", "return rider", "return schedule"]
+  },
+  {
+    "id": "returns-005",
+    "category": "returns",
+    "title": "What happens to my refund if I paid cash on delivery?",
+    "body": "For Cash on Delivery (COD) orders that are returned or cancelled after dispatch, the refund cannot be sent back as cash. Instead, the full refund amount is credited to your QuickCrate Wallet instantly upon approval of the return or cancellation. From the wallet, you can use the balance on your next order or request a bank transfer. Bank transfer from the wallet takes 5-7 business days. This policy exists because COD payments are handled in cash by the rider and are not directly traceable to a digital payment method. To receive future refunds to your bank account directly, we recommend using UPI or a card for payment, which allows direct refund reversals. Your wallet refund will be visible under Account → QuickCrate Wallet → Transaction History.",
+    "tags": ["COD refund", "cash refund", "COD return", "wallet refund", "cash on delivery refund"]
+  },
+  {
+    "id": "returns-006",
+    "category": "returns",
+    "title": "Can I exchange an item instead of getting a refund?",
+    "body": "QuickCrate supports exchanges for certain product categories, particularly fresh produce, dairy, packaged staples, and non-perishable household items. During the return flow, after selecting your item, choose 'Exchange' instead of 'Refund'. You'll then be shown available alternatives in the same category. Select your preferred replacement and confirm. The exchange item is dispatched with the return pick-up rider or with the next delivery slot, depending on the exchange item's availability. If the exchange item costs more than the original, you'll be asked to pay the difference. If it costs less, the difference is added to your QuickCrate Wallet. Exchanges for electronics are handled as replacements under the 7-day replacement guarantee and follow a separate process via customer support.",
+    "tags": ["exchange item", "product exchange", "replace item", "swap product"]
+  },
+  {
+    "id": "returns-007",
+    "category": "returns",
+    "title": "What items cannot be returned on QuickCrate?",
+    "body": "Certain product categories are non-returnable on QuickCrate due to health, safety, or logistical reasons. Non-returnable items include: opened or consumed food and beverage products, fresh produce or perishables reported more than 24 hours after delivery, intimate apparel and personal hygiene products (razors, toothbrushes, etc.), digital products (gift cards, recharge codes), medications and health supplements if opened, and items explicitly tagged 'Final Sale' on the product listing. Even for non-returnable categories, if the item was delivered in a defective or damaged condition, you are still eligible to raise a quality complaint within 24 hours of delivery. Exceptions to the non-returnable policy are handled case by case by our support team.",
+    "tags": ["non-returnable", "cannot return", "return exceptions", "no return items"]
+  },
+  {
+    "id": "returns-008",
+    "category": "returns",
+    "title": "My return was rejected. What are my options?",
+    "body": "If your return request was rejected, the rejection notice will explain the reason — common reasons include the return window having expired, the item being in the non-returnable category, or the submitted photo not clearly showing the issue. If you believe the rejection was in error, tap 'Dispute Rejection' on the return status screen. This escalates your case to a senior support agent for manual review, which typically takes 4-6 hours. You can also contact live support via in-app chat and provide additional photos or context. For rejections related to quality claims (damaged or wrong item), we particularly encourage disputing — our quality team reviews these with greater leniency. QuickCrate's goal is customer satisfaction; we will always look for a fair resolution.",
+    "tags": ["return rejected", "rejected return", "dispute return", "return appeal"]
+  },
+  {
+    "id": "returns-009",
+    "category": "returns",
+    "title": "How do I track the status of my return and refund?",
+    "body": "You can track the entire return and refund journey from the app. Go to 'My Orders', select the order with the return, and tap 'View Return Status'. The status screen shows each stage: Return Requested → Pick-up Scheduled → Item Collected → Quality Check → Refund Initiated → Refund Completed. Each stage is timestamped and includes any relevant notes. You'll receive push notifications and SMS at key stage transitions. For refunds to a bank account or card, a refund reference number is provided once initiated — you can use this number when querying your bank. If the status gets stuck at any stage for more than 12 hours without an update, use the in-app chat to report a stuck return. Our operations team monitors return pipelines and can intervene.",
+    "tags": ["track return", "return status", "refund status", "return progress"]
+  },
+  {
+    "id": "returns-010",
+    "category": "returns",
+    "title": "What should I do if I receive an expired product?",
+    "body": "Receiving an expired product is a serious quality issue and QuickCrate takes it very seriously. If you find that a delivered item has passed its expiry date, report it immediately using 'My Orders → Report Issue → Expired Product'. Upload a clear photo showing the expiry date on the packaging. Do not consume the product. Once reported, a replacement is dispatched immediately without waiting for return pick-up, and a full refund or store credit is also offered. The incident is flagged internally for supplier and dark-store quality audits. Expiry reports help us identify shelf management issues and prevent future occurrences. QuickCrate's quality system automatically flags products nearing expiry, but on rare occasions, an expired item may slip through — your report is critical for continuous improvement.",
+    "tags": ["expired product", "expiry date", "quality issue", "expired item", "past expiry"]
+  },
+  {
+    "id": "returns-011",
+    "category": "returns",
+    "title": "Can I return a product bought during a sale or with a coupon?",
+    "body": "Yes, products bought on sale or with a coupon can be returned under the standard return policy. The refund amount will be the price you actually paid (after discount), not the MRP. If you used a first-order coupon or a one-time promo code, the coupon is considered used and will not be re-issued after a return. However, the monetary discount amount is refunded. For example, if you used a ₹100 coupon and paid ₹300 for an order, your refund will be ₹300 (the amount you paid). If you paid via QuickCrate Wallet credits (cashback or referral), those credits are also refunded to your wallet. Items bought as part of a 'Bundle Deal' or 'Combo Pack' must be returned as a complete bundle — individual items from a bundle cannot be returned separately.",
+    "tags": ["sale return", "coupon return", "discount refund", "promo code return", "bundle return"]
+  }
+]

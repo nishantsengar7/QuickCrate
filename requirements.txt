@@ -1,0 +1,33 @@
+# Qdrant client connection (Phase 2 & 8)
+qdrant-client==1.18.0
+
+# Sentence embeddings & Cross-encoder reranking (Phase 2 & 4)
+# Note: sentence-transformers depends on PyTorch. On CPU-only environments (like HF Spaces),
+# standard PyTorch wheels are very large (~2GB) because they bundle CUDA libraries, which can
+# lead to build timeouts or disk space limits. In the Dockerfile, we can explicitly install
+# the CPU-only variant first, or let HF handle it.
+sentence-transformers==5.6.0
+torch==2.10.0
+
+# Sparse (BM25) search (Phase 2)
+rank-bm25==0.2.2
+
+# LLM Providers (Phase 5)
+google-genai==2.8.0
+openai==2.14.0
+
+# API Gateway (Phase 7)
+fastapi==0.139.0
+uvicorn==0.50.2
+
+# Observability, dotenv, and clients (Phase 7)
+streamlit==1.59.0
+httpx==0.28.1
+python-dotenv==1.0.0
+tqdm==4.67.3
+
+# Evaluation & observability
+# Note: ragas has strict dependency requirements on pydantic (sometimes requiring pydantic v1
+# or specific v2 ranges) and langchain. Pinning to a stable release protects against silent breaks.
+ragas==0.2.1
+pydantic==2.13.4

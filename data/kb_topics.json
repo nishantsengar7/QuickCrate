@@ -1,0 +1,19 @@
+﻿{
+  "app_name": "QuickCrate",
+  "version": "1.0.0",
+  "description": "Knowledge-base topic manifest for QuickCrate customer support RAG system.",
+  "total_planned_articles": 116,
+  "categories": [
+    { "id": "orders",        "label": "Orders & Checkout",       "planned_articles": 12 },
+    { "id": "delivery",      "label": "Delivery & Tracking",     "planned_articles": 12 },
+    { "id": "payments",      "label": "Payments & Billing",      "planned_articles": 11 },
+    { "id": "returns",       "label": "Returns & Refunds",       "planned_articles": 11 },
+    { "id": "account",       "label": "Account & Profile",       "planned_articles": 10 },
+    { "id": "products",      "label": "Products & Availability", "planned_articles": 10 },
+    { "id": "promotions",    "label": "Promotions & Coupons",    "planned_articles": 10 },
+    { "id": "subscriptions", "label": "QuickCrate Plus",         "planned_articles": 10 },
+    { "id": "safety",        "label": "Safety & Quality",        "planned_articles": 10 },
+    { "id": "app_support",   "label": "App & Technical Support", "planned_articles": 10 },
+    { "id": "business",      "label": "Business Accounts",       "planned_articles": 10 }
+  ]
+}

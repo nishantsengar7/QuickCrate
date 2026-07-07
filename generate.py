@@ -111,7 +111,7 @@ OPENAI_MODEL: str = "gpt-4o-mini"
 #: to human support instead of being answered by the LLM.
 #: Default 0.0 is a sensible starting point for ms-marco-MiniLM-L-6-v2;
 #: calibrate empirically against your labelled evaluation set.
-CONFIDENCE_THRESHOLD: float = 0.0
+CONFIDENCE_THRESHOLD: float = 3.0
 
 #: If the best rerank_score is between MENTION_FLOOR and CONFIDENCE_THRESHOLD
 #: the escalation message includes a "best-effort snippet" from the top result.

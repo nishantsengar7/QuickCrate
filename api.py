@@ -74,8 +74,21 @@ logger = logging.getLogger("api")
 # Paths
 # ---------------------------------------------------------------------------
 BASE_DIR = Path(__file__).parent
-LOG_FILE = BASE_DIR / "requests.log"      # one JSON object per line (JSONL)
-DB_FILE  = BASE_DIR / "requests.db"       # SQLite for easy ad-hoc queries
+
+# On container platforms like Hugging Face Spaces, the workspace directory
+# might be read-only or restrict file creation at runtime.
+# If so, we fall back to /tmp which is guaranteed to be writeable in containers.
+try:
+    _test_file = BASE_DIR / ".write_test"
+    _test_file.touch()
+    _test_file.unlink()
+    BASE_WRITE_DIR = BASE_DIR
+except (OSError, PermissionError):
+    BASE_WRITE_DIR = Path("/tmp")
+    logger.info("Workspace directory is read-only. Redirecting SQLite database and log file to %s", BASE_WRITE_DIR)
+
+LOG_FILE = BASE_WRITE_DIR / "requests.log"      # one JSON object per line (JSONL)
+DB_FILE  = BASE_WRITE_DIR / "requests.db"       # SQLite for easy ad-hoc queries
 
 # ---------------------------------------------------------------------------
 # In-memory session store

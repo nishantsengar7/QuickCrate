@@ -60,6 +60,7 @@ from __future__ import annotations
 import logging
 import os
 import textwrap
+import time
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
@@ -221,7 +222,13 @@ def _call_llm(system: str, user: str) -> str:
 
 
 def _call_gemini(system: str, user: str) -> str:
-    """Call Gemini 1.5 Flash via the google-genai SDK."""
+    """Call Gemini 1.5 Flash via the google-genai SDK.
+
+    Retries up to 3 times on rate-limit / quota errors (HTTP 429 /
+    ResourceExhausted) with exponential backoff.  This prevents transient
+    quota bursts from crashing the request on high-traffic or test-heavy
+    workloads.
+    """
     try:
         from google import genai
         from google.genai import types
@@ -238,15 +245,41 @@ def _call_gemini(system: str, user: str) -> str:
         )
 
     client = genai.Client(api_key=api_key)
-    response = client.models.generate_content(
-        model=GEMINI_MODEL,
-        contents=user,
-        config=types.GenerateContentConfig(
-            system_instruction=system,
-            temperature=0.0,
-        ),
-    )
-    return response.text
+    _RATE_LIMIT_DELAYS = [10, 30]  # seconds between retries (1st, 2nd)
+    last_exc: Exception | None = None
+
+    for attempt, delay in enumerate(
+        [None] + _RATE_LIMIT_DELAYS, start=1
+    ):
+        if delay is not None:
+            logger.warning(
+                "Gemini rate-limit hit (attempt %d). Retrying in %ds…",
+                attempt, delay,
+            )
+            time.sleep(delay)
+        try:
+            response = client.models.generate_content(
+                model=GEMINI_MODEL,
+                contents=user,
+                config=types.GenerateContentConfig(
+                    system_instruction=system,
+                    temperature=0.0,
+                ),
+            )
+            return response.text
+        except Exception as exc:  # noqa: BLE001
+            exc_str = str(exc).lower()
+            # Retry only on rate-limit / quota errors; re-raise anything else.
+            if "429" in exc_str or "quota" in exc_str or "resource_exhausted" in exc_str or "rate" in exc_str:
+                last_exc = exc
+                continue
+            raise
+
+    raise RuntimeError(
+        f"Gemini call failed after {1 + len(_RATE_LIMIT_DELAYS)} attempts "
+        f"due to rate limiting."
+    ) from last_exc
+
 
 
 def _call_openai(system: str, user: str) -> str:

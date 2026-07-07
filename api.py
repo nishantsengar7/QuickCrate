@@ -37,6 +37,7 @@ from __future__ import annotations
 
 import json
 import logging
+import os
 import sqlite3
 import time
 import uuid
@@ -188,6 +189,27 @@ async def lifespan(app: FastAPI):
     app.state.retriever = HybridRetriever()
     app.state.ce_model = load_cross_encoder()
     logger.info("Models loaded. Server ready.")
+
+    # -------------------------------------------------------------------
+    # Warm up the Qdrant POST connection.
+    # Model loading takes ~2 min on HF CPU, during which the idle TCP
+    # connection to Qdrant Cloud is silently closed by the remote server.
+    # A dummy query_points call here re-establishes the connection so that
+    # the first real user query does not hit a stale pooled socket.
+    # -------------------------------------------------------------------
+    _collection = os.environ.get("QDRANT_COLLECTION", "quickcrate_kb")
+    _dummy_vector = [0.0] * 1024  # matches BAAI/bge-large-en-v1.5 dim
+    try:
+        app.state.retriever.qdrant.query_points(
+            collection_name=_collection,
+            query=_dummy_vector,
+            limit=1,
+            with_payload=False,
+        )
+        logger.info("Qdrant POST connection warmed up.")
+    except Exception as _exc:  # noqa: BLE001
+        logger.warning("Qdrant warm-up failed (non-fatal): %s", _exc)
+
     yield
     # Shutdown: nothing to clean up for in-memory models.
     logger.info("Server shutting down.")

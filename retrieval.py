@@ -121,6 +121,7 @@ class HybridRetriever:
         bm25_path: Path = BM25_INDEX_PATH,
     ) -> None:
         self.collection = collection
+        self._qdrant_url = qdrant_url  # stored so dense_search retries can recreate the client
 
         # --- Dense retrieval components ---
         self.qdrant: QdrantClient = get_qdrant_client(qdrant_url)
@@ -205,9 +206,11 @@ class HybridRetriever:
             first.  chunk_id matches the payload field set during ingestion.
         """
         query_vector = self._embed_query(query)
-        # Retry up to 3 times with exponential backoff to handle transient
-        # ReadTimeout errors from Qdrant Cloud (common after a long CPU
-        # embedding step that keeps the connection idle).
+        # Retry up to 3 times.  On each failure we close the current client
+        # and create a fresh one so that the next attempt always opens a new
+        # TCP connection rather than re-using a stale socket from the
+        # connection pool (the main cause of RemoteProtocolError on HF Spaces
+        # where model loading keeps the connection idle for 2+ minutes).
         max_attempts = 3
         for attempt in range(1, max_attempts + 1):
             try:
@@ -223,9 +226,17 @@ class HybridRetriever:
                     raise
                 wait = 2 ** (attempt - 1)  # 1s, 2s
                 logger.warning(
-                    "Qdrant query_points attempt %d/%d failed (%s). Retrying in %ds…",
+                    "Qdrant query_points attempt %d/%d failed (%s). "
+                    "Recreating client and retrying in %ds…",
                     attempt, max_attempts, exc, wait,
                 )
+                # Close the stale client and open a fresh one so the next
+                # attempt gets a brand-new TCP connection.
+                try:
+                    self.qdrant.close()
+                except Exception:  # noqa: BLE001
+                    pass
+                self.qdrant = get_qdrant_client(self._qdrant_url)
                 time.sleep(wait)
         # Unreachable — loop always returns or raises above.
         return []

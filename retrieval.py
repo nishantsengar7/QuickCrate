@@ -204,12 +204,12 @@ class HybridRetriever:
             first.  chunk_id matches the payload field set during ingestion.
         """
         query_vector = self._embed_query(query)
-        hits = self.qdrant.search(
+        hits = self.qdrant.query_points(
             collection_name=self.collection,
-            query_vector=query_vector,
+            query=query_vector,
             limit=top_k,
             with_payload=True,
-        )
+        ).points
         return [(hit.payload["chunk_id"], float(hit.score)) for hit in hits]
 
     def sparse_search(

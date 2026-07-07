@@ -33,6 +33,10 @@ RUN chown -R user:user /var/log/nginx /var/lib/nginx
 # Switch to non-root user
 USER user
 
+# Pre-download and cache models to avoid 502 timeouts on cold starts
+# BAAI/bge-large-en-v1.5 (~1.34 GB) and cross-encoder/ms-marco-MiniLM-L-6-v2 (~70 MB)
+RUN python -c "from sentence_transformers import SentenceTransformer, CrossEncoder; SentenceTransformer('BAAI/bge-large-en-v1.5'); CrossEncoder('cross-encoder/ms-marco-MiniLM-L-6-v2')"
+
 # Expose the expected Hugging Face Space port
 EXPOSE 7860
 

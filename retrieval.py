@@ -28,6 +28,7 @@ All three are callable on their own so callers can compare or ablate modes.
 from __future__ import annotations
 
 import logging
+import time
 from pathlib import Path
 from typing import Any
 
@@ -204,13 +205,30 @@ class HybridRetriever:
             first.  chunk_id matches the payload field set during ingestion.
         """
         query_vector = self._embed_query(query)
-        hits = self.qdrant.query_points(
-            collection_name=self.collection,
-            query=query_vector,
-            limit=top_k,
-            with_payload=True,
-        ).points
-        return [(hit.payload["chunk_id"], float(hit.score)) for hit in hits]
+        # Retry up to 3 times with exponential backoff to handle transient
+        # ReadTimeout errors from Qdrant Cloud (common after a long CPU
+        # embedding step that keeps the connection idle).
+        max_attempts = 3
+        for attempt in range(1, max_attempts + 1):
+            try:
+                hits = self.qdrant.query_points(
+                    collection_name=self.collection,
+                    query=query_vector,
+                    limit=top_k,
+                    with_payload=True,
+                ).points
+                return [(hit.payload["chunk_id"], float(hit.score)) for hit in hits]
+            except Exception as exc:  # noqa: BLE001
+                if attempt == max_attempts:
+                    raise
+                wait = 2 ** (attempt - 1)  # 1s, 2s
+                logger.warning(
+                    "Qdrant query_points attempt %d/%d failed (%s). Retrying in %ds…",
+                    attempt, max_attempts, exc, wait,
+                )
+                time.sleep(wait)
+        # Unreachable — loop always returns or raises above.
+        return []
 
     def sparse_search(
         self,

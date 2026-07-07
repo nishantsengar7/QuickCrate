@@ -385,10 +385,10 @@ def get_qdrant_client(url: str = QDRANT_URL) -> QdrantClient:
     api_key = os.environ.get("QDRANT_API_KEY")
     if api_key:
         logger.info("Connecting to Qdrant Cloud (secure client) at %s", url)
-        return QdrantClient(url=url, api_key=api_key, timeout=60.0)
+        return QdrantClient(url=url, api_key=api_key, timeout=90.0)
     else:
         logger.info("Connecting to Qdrant at %s", url)
-        return QdrantClient(url=url, timeout=60.0)
+        return QdrantClient(url=url, timeout=90.0)
 
 
 def upsert_to_qdrant(

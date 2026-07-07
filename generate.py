@@ -109,9 +109,10 @@ OPENAI_MODEL: str = "gpt-4o-mini"
 #: Cross-encoder logit threshold for the confidence gate.
 #: Queries whose best rerank_score < CONFIDENCE_THRESHOLD are escalated
 #: to human support instead of being answered by the LLM.
-#: Default 0.0 is a sensible starting point for ms-marco-MiniLM-L-6-v2;
-#: calibrate empirically against your labelled evaluation set.
-CONFIDENCE_THRESHOLD: float = 3.0
+#: Overridable via QC_CONFIDENCE_THRESHOLD env var so each deployment
+#: (local vs. HF Spaces) can be tuned independently without code changes.
+#: Calibrated at 2.0: out-of-scope queries score ~1.2-1.5; in-scope ~2.5+.
+CONFIDENCE_THRESHOLD: float = float(os.getenv("QC_CONFIDENCE_THRESHOLD", "2.0"))
 
 #: If the best rerank_score is between MENTION_FLOOR and CONFIDENCE_THRESHOLD
 #: the escalation message includes a "best-effort snippet" from the top result.

@@ -244,62 +244,22 @@ def _call_gemini(system: str, user: str) -> str:
             "Get a key from https://aistudio.google.com/app/apikey"
         )
 
-    # Set an HTTP-level timeout so a stalled Gemini connection does not hang
-    # the server worker indefinitely.  60 s per attempt is generous for a
-    # chat-length response; adjust if you use streaming or very long outputs.
-    import random
-
+    # Let the google-genai SDK handle retries natively. It has built-in
+    # exponential backoff for 429/503 errors. Set a 30s timeout per call.
     client = genai.Client(
         api_key=api_key,
-        http_options=types.HttpOptions(timeout=60_000),  # milliseconds
+        http_options=types.HttpOptions(timeout=30_000),  # milliseconds
     )
-    # Shorter base delays with jitter allow resolving transient 429s quickly
-    # without blowing past the client request timeout.
-    _BASE_DELAYS = [2.0, 5.0, 10.0, 20.0]
-    last_exc: Exception | None = None
-
-    for attempt, base_delay in enumerate(
-        [None] + _BASE_DELAYS, start=1
-    ):
-        if base_delay is not None:
-            # Add uniform random jitter of +/- 15% to avoid thundering herd problem
-            jitter = base_delay * 0.15
-            delay = base_delay + random.uniform(-jitter, jitter)
-            delay = max(0.1, delay)
-            logger.warning(
-                "Gemini rate-limit hit (attempt %d). Retrying in %.2fs…",
-                attempt, delay,
-            )
-            time.sleep(delay)
-        try:
-            response = client.models.generate_content(
-                model=GEMINI_MODEL,
-                contents=user,
-                config=types.GenerateContentConfig(
-                    system_instruction=system,
-                    temperature=0.0,
-                ),
-            )
-            return response.text
-        except Exception as exc:  # noqa: BLE001
-            exc_str = str(exc).lower()
-            # Retry on rate-limit (429) or transient server availability issues (503)
-            if (
-                "429" in exc_str 
-                or "quota" in exc_str 
-                or "resource_exhausted" in exc_str 
-                or "rate" in exc_str
-                or "503" in exc_str
-                or "unavailable" in exc_str
-            ):
-                last_exc = exc
-                continue
-            raise
-
-    raise RuntimeError(
-        f"Gemini call failed after {1 + len(_BASE_DELAYS)} attempts "
-        f"due to rate limiting."
-    ) from last_exc
+    
+    response = client.models.generate_content(
+        model=GEMINI_MODEL,
+        contents=user,
+        config=types.GenerateContentConfig(
+            system_instruction=system,
+            temperature=0.0,
+        ),
+    )
+    return response.text
 
 
 

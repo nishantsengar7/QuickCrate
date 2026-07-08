@@ -38,7 +38,7 @@ CHAT_ENDPOINT: str = f"{API_URL}/chat"
 HEALTH_ENDPOINT: str = f"{API_URL}/health"
 
 # Timeout for API calls (seconds).  Cross-encoder + LLM can take ~5-15 s on CPU.
-REQUEST_TIMEOUT: float = 60.0
+REQUEST_TIMEOUT: float = 90.0
 
 
 # ---------------------------------------------------------------------------

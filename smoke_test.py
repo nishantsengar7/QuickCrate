@@ -119,7 +119,7 @@ def test_two_turn_chat(api_url: str) -> bool:
     q1 = "What are the benefits of QuickCrate Plus?"
     print(f"\nTurn 1 Query: '{q1}'")
     try:
-        r1 = httpx.post(chat_url, json={"query": q1}, timeout=30.0)
+        r1 = httpx.post(chat_url, json={"query": q1}, timeout=90.0)
         r1.raise_for_status()
         data1 = r1.json()
         session_id = data1.get("session_id")
@@ -129,7 +129,9 @@ def test_two_turn_chat(api_url: str) -> bool:
         # Turn 2: Vague follow-up leveraging session context
         q2 = "What about COD? Is that available too?"
         print(f"\nTurn 2 Query: '{q2}' (using Session ID: {session_id})")
-        r2 = httpx.post(chat_url, json={"query": q2, "session_id": session_id}, timeout=30.0)
+        # Turn 2 triggers two sequential LLM calls: query rewriting + answer
+        # generation.  Use a 90-second timeout to accommodate both.
+        r2 = httpx.post(chat_url, json={"query": q2, "session_id": session_id}, timeout=90.0)
         r2.raise_for_status()
         data2 = r2.json()
 

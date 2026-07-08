@@ -244,7 +244,13 @@ def _call_gemini(system: str, user: str) -> str:
             "Get a key from https://aistudio.google.com/app/apikey"
         )
 
-    client = genai.Client(api_key=api_key)
+    # Set an HTTP-level timeout so a stalled Gemini connection does not hang
+    # the server worker indefinitely.  60 s per attempt is generous for a
+    # chat-length response; adjust if you use streaming or very long outputs.
+    client = genai.Client(
+        api_key=api_key,
+        http_options=types.HttpOptions(timeout=60_000),  # milliseconds
+    )
     _RATE_LIMIT_DELAYS = [10, 30]  # seconds between retries (1st, 2nd)
     last_exc: Exception | None = None
 

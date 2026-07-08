@@ -112,8 +112,8 @@ OPENAI_MODEL: str = "gpt-4o-mini"
 #: to human support instead of being answered by the LLM.
 #: Overridable via QC_CONFIDENCE_THRESHOLD env var so each deployment
 #: (local vs. HF Spaces) can be tuned independently without code changes.
-#: Calibrated at 2.0: out-of-scope queries score ~1.2-1.5; in-scope ~2.5+.
-CONFIDENCE_THRESHOLD: float = float(os.getenv("QC_CONFIDENCE_THRESHOLD", "2.0"))
+#: Calibrated at 1.6: out-of-scope queries score ~1.2-1.5; in-scope ~2.5+.
+CONFIDENCE_THRESHOLD: float = float(os.getenv("QC_CONFIDENCE_THRESHOLD", "1.6"))
 
 #: If the best rerank_score is between MENTION_FLOOR and CONFIDENCE_THRESHOLD
 #: the escalation message includes a "best-effort snippet" from the top result.
@@ -244,22 +244,36 @@ def _call_gemini(system: str, user: str) -> str:
             "Get a key from https://aistudio.google.com/app/apikey"
         )
 
-    # Let the google-genai SDK handle retries natively. It has built-in
-    # exponential backoff for 429/503 errors. Set a 30s timeout per call.
     client = genai.Client(
         api_key=api_key,
-        http_options=types.HttpOptions(timeout=30_000),  # milliseconds
+        http_options=types.HttpOptions(timeout=15_000),  # 15s timeout
     )
     
-    response = client.models.generate_content(
-        model=GEMINI_MODEL,
-        contents=user,
-        config=types.GenerateContentConfig(
-            system_instruction=system,
-            temperature=0.0,
-        ),
-    )
-    return response.text
+    # Lightweight retry loop to handle transient API issues (429/503) under load.
+    _BASE_DELAYS = [1.5, 4.0]
+    last_exc = None
+    for attempt, base_delay in enumerate([None] + _BASE_DELAYS, start=1):
+        if base_delay is not None:
+            time.sleep(base_delay)
+        try:
+            response = client.models.generate_content(
+                model=GEMINI_MODEL,
+                contents=user,
+                config=types.GenerateContentConfig(
+                    system_instruction=system,
+                    temperature=0.0,
+                ),
+            )
+            return response.text
+        except Exception as exc:
+            logger.warning(
+                "Gemini API call failed (attempt %d/3): %s. Retrying...",
+                attempt,
+                exc,
+            )
+            last_exc = exc
+            continue
+    raise last_exc
 
 
 
@@ -340,12 +354,11 @@ def _rewrite_query(
     str
         A standalone question that can be sent directly to hybrid_search().
     """
-    if not history:
-        return latest_query
-
-    history_text = "\n".join(
-        f"{turn['role'].capitalize()}: {turn['content']}" for turn in history
-    )
+    history_text = ""
+    if history:
+        history_text = "\n".join(
+            f"{turn['role'].capitalize()}: {turn['content']}" for turn in history
+        )
     user_prompt = (
         f"Conversation so far:\n{history_text}\n\n"
         f"Latest user message: {latest_query}\n\n"
@@ -489,12 +502,9 @@ def answer_query(
         rewritten query, and the raw top chunks for logging.
     """
     # ------------------------------------------------------------------
-    # Step 1: Query rewriting (only when conversation history is present)
+    # Step 1: Query rewriting (always rewrite to expand keyword fragments)
     # ------------------------------------------------------------------
-    if conversation_history:
-        retrieval_query = _rewrite_query(query, conversation_history)
-    else:
-        retrieval_query = query
+    retrieval_query = _rewrite_query(query, conversation_history or [])
 
     # ------------------------------------------------------------------
     # Step 2: Hybrid retrieval + cross-encoder reranking

@@ -22,7 +22,16 @@ from __future__ import annotations
 
 import argparse
 import sys
+import io
 import httpx
+
+# Force UTF-8 encoding for stdout/stderr on Windows to prevent UnicodeEncodeErrors with emojis
+if sys.platform == 'win32':
+    try:
+        sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+        sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8')
+    except AttributeError:
+        pass
 
 
 # ---------------------------------------------------------------------------
@@ -58,7 +67,8 @@ def test_single_turns(api_url: str) -> bool:
         
         payload = {"query": tc["query"]}
         try:
-            resp = httpx.post(chat_url, json=payload, timeout=30.0)
+            # Single-turn queries can trigger rate-limit retries; use a 90-second timeout
+            resp = httpx.post(chat_url, json=payload, timeout=90.0)
             if resp.status_code != 200:
                 print(f"  ❌ Failed: Server returned status code {resp.status_code}")
                 print(f"     Body: {resp.text}")

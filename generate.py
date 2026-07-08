@@ -102,7 +102,7 @@ logger = logging.getLogger(__name__)
 LLM_PROVIDER: str = os.getenv("QC_LLM_PROVIDER", "gemini")
 
 #: Gemini model identifier.
-GEMINI_MODEL: str = "gemini-2.5-flash"
+GEMINI_MODEL: str = os.getenv("QC_GEMINI_MODEL", "gemini-2.5-flash-lite")
 
 #: OpenAI model identifier.
 OPENAI_MODEL: str = "gpt-4o-mini"
@@ -283,8 +283,15 @@ def _call_gemini(system: str, user: str) -> str:
             return response.text
         except Exception as exc:  # noqa: BLE001
             exc_str = str(exc).lower()
-            # Retry only on rate-limit / quota errors; re-raise anything else.
-            if "429" in exc_str or "quota" in exc_str or "resource_exhausted" in exc_str or "rate" in exc_str:
+            # Retry on rate-limit (429) or transient server availability issues (503)
+            if (
+                "429" in exc_str 
+                or "quota" in exc_str 
+                or "resource_exhausted" in exc_str 
+                or "rate" in exc_str
+                or "503" in exc_str
+                or "unavailable" in exc_str
+            ):
                 last_exc = exc
                 continue
             raise

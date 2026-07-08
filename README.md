@@ -1,13 +1,3 @@
----
-title: QuickCrate Customer Support RAG
-emoji: 🛒
-colorFrom: green
-colorTo: blue
-sdk: docker
-app_port: 7860
-pinned: false
----
-
 # QuickCrate Customer Support RAG
 
 This is a multi-stage, production-ready Retrieval-Augmented Generation (RAG) system built for **QuickCrate**, an ultra-fast grocery delivery app. The system provides a highly accurate, grounded customer support assistant with safe guardrails.

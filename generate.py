@@ -247,19 +247,27 @@ def _call_gemini(system: str, user: str) -> str:
     # Set an HTTP-level timeout so a stalled Gemini connection does not hang
     # the server worker indefinitely.  60 s per attempt is generous for a
     # chat-length response; adjust if you use streaming or very long outputs.
+    import random
+
     client = genai.Client(
         api_key=api_key,
         http_options=types.HttpOptions(timeout=60_000),  # milliseconds
     )
-    _RATE_LIMIT_DELAYS = [10, 30]  # seconds between retries (1st, 2nd)
+    # Shorter base delays with jitter allow resolving transient 429s quickly
+    # without blowing past the client request timeout.
+    _BASE_DELAYS = [2.0, 5.0, 10.0, 20.0]
     last_exc: Exception | None = None
 
-    for attempt, delay in enumerate(
-        [None] + _RATE_LIMIT_DELAYS, start=1
+    for attempt, base_delay in enumerate(
+        [None] + _BASE_DELAYS, start=1
     ):
-        if delay is not None:
+        if base_delay is not None:
+            # Add uniform random jitter of +/- 15% to avoid thundering herd problem
+            jitter = base_delay * 0.15
+            delay = base_delay + random.uniform(-jitter, jitter)
+            delay = max(0.1, delay)
             logger.warning(
-                "Gemini rate-limit hit (attempt %d). Retrying in %ds…",
+                "Gemini rate-limit hit (attempt %d). Retrying in %.2fs…",
                 attempt, delay,
             )
             time.sleep(delay)
@@ -282,7 +290,7 @@ def _call_gemini(system: str, user: str) -> str:
             raise
 
     raise RuntimeError(
-        f"Gemini call failed after {1 + len(_RATE_LIMIT_DELAYS)} attempts "
+        f"Gemini call failed after {1 + len(_BASE_DELAYS)} attempts "
         f"due to rate limiting."
     ) from last_exc
 

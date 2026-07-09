@@ -28,6 +28,7 @@ COPY --chown=user:user . /app
 COPY --chown=user:user nginx.conf /etc/nginx/nginx.conf
 
 # Give the user permission to run nginx (write logs & run process)
+RUN chmod +x /app/start_services.sh
 RUN chown -R user:user /var/log/nginx /var/lib/nginx
 
 # Switch to non-root user
@@ -40,8 +41,5 @@ RUN python -c "from sentence_transformers import SentenceTransformer, CrossEncod
 # Expose the expected Hugging Face Space port
 EXPOSE 7860
 
-# Start FastAPI (uvicorn) on 8001, Streamlit on 8501, and Nginx on 7860 in the foreground.
-# Since Nginx runs in the foreground, it keeps the container alive.
-CMD python -m uvicorn api:app --host 127.0.0.1 --port 8001 & \
-    python -m streamlit run app.py --server.port 8501 --server.address 127.0.0.1 --server.enableCORS=false --server.enableXsrfProtection=false & \
-    nginx -g "daemon off;"
+# Start services using the startup script
+CMD ["/bin/bash", "/app/start_services.sh"]

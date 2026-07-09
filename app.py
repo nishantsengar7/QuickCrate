@@ -7,7 +7,7 @@ CHAT_ENDPOINT: str = f'{API_URL}/chat'
 HEALTH_ENDPOINT: str = f'{API_URL}/health'
 REQUEST_TIMEOUT: float = 90.0
 st.set_page_config(page_title='QuickCrate Support', page_icon='🛒', layout='centered', initial_sidebar_state='expanded')
-st.markdown('\n    <style>\n    /* Soften the escalation warning box border */\n    .escalation-box {\n        border-left: 4px solid #f59e0b;\n        background: #fffbeb;\n        padding: 0.75rem 1rem;\n        border-radius: 0.375rem;\n        margin-top: 0.5rem;\n    }\n    /* Make source pills look tidy */\n    .source-pill {\n        display: inline-block;\n        background: #eff6ff;\n        border: 1px solid #bfdbfe;\n        border-radius: 999px;\n        padding: 2px 10px;\n        font-size: 0.78rem;\n        color: #1d4ed8;\n        margin: 2px 3px;\n    }\n    </style>\n    ', unsafe_allow_html=True)
+st.markdown('\n    <style>\n    /* Soften the escalation warning box border */\n    .escalation-box {\n        border-left: 4px solid #f59e0b;\n        background: #fffbeb;\n        padding: 0.75rem 1rem;\n        border-radius: 0.375rem;\n        margin-top: 0.5rem;\n    }\n    /* Distinct style for infrastructure/generation errors */\n    .error-box {\n        border-left: 4px solid #ef4444;\n        background: #fef2f2;\n        padding: 0.75rem 1rem;\n        border-radius: 0.375rem;\n        margin-top: 0.5rem;\n    }\n    /* Make source pills look tidy */\n    .source-pill {\n        display: inline-block;\n        background: #eff6ff;\n        border: 1px solid #bfdbfe;\n        border-radius: 999px;\n        padding: 2px 10px;\n        font-size: 0.78rem;\n        color: #1d4ed8;\n        margin: 2px 3px;\n    }\n    </style>\n    ', unsafe_allow_html=True)
 if 'session_id' not in st.session_state:
     st.session_state.session_id = None
 if 'messages' not in st.session_state:
@@ -45,8 +45,11 @@ def _render_message(msg: dict) -> None:
     content = msg['content']
     sources = msg.get('sources', [])
     escalated = msg.get('escalated', False)
+    error = msg.get('error', False)
     with st.chat_message(role, avatar='🛒' if role == 'assistant' else None):
-        if role == 'assistant' and escalated:
+        if role == 'assistant' and error:
+            st.markdown(f'<div class="error-box">\n                🚨 <strong>Service Error</strong><br><br>\n                {content}\n                </div>', unsafe_allow_html=True)
+        elif role == 'assistant' and escalated:
             st.markdown(f'<div class="escalation-box">\n                ⚠️ <strong>Escalated to human support</strong><br><br>\n                {content}\n                </div>', unsafe_allow_html=True)
         else:
             st.markdown(content)
@@ -71,6 +74,7 @@ if (prompt := st.chat_input('Type your question here…')):
     _render_message(user_msg)
     with st.chat_message('assistant', avatar='🛒'):
         with st.spinner('Searching the knowledge base…'):
+            error_state = False
             try:
                 t0 = time.perf_counter()
                 data = _call_api(prompt)
@@ -79,17 +83,36 @@ if (prompt := st.chat_input('Type your question here…')):
                 answer = data.get('answer', '')
                 sources = data.get('sources', [])
                 escalated = data.get('escalated', False)
-            except httpx.ConnectError:
-                answer = f'⚠️ Could not reach the backend API. Make sure it is running at `{API_URL}` (`uvicorn api:app --port 8000`).'
+            except httpx.HTTPStatusError as exc:
+                latency = 0.0
+                error_state = True
+                try:
+                    err_json = exc.response.json()
+                    err_msg = err_json.get('message', 'Our AI service is temporarily busy, please try again in a moment.')
+                except Exception:
+                    err_msg = 'Our AI service is temporarily busy, please try again in a moment.'
+                answer = err_msg
                 sources = []
-                escalated = True
+                escalated = False
+            except httpx.ConnectError:
+                answer = f'Could not reach the backend API. Make sure it is running at `{API_URL}`.'
+                sources = []
+                escalated = False
+                error_state = True
                 latency = 0.0
             except Exception as exc:
-                answer = f'⚠️ Unexpected error: {exc}'
+                answer = f'Unexpected error: {exc}'
                 sources = []
-                escalated = True
+                escalated = False
+                error_state = True
                 latency = 0.0
-    assistant_msg = {'role': 'assistant', 'content': answer, 'sources': sources, 'escalated': escalated}
+    assistant_msg = {
+        'role': 'assistant',
+        'content': answer,
+        'sources': sources,
+        'escalated': escalated,
+        'error': error_state
+    }
     st.session_state.messages.append(assistant_msg)
     if latency > 0:
         st.caption(f'⏱️ Response in {latency:.1f}s')

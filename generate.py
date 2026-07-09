@@ -17,6 +17,11 @@ from rerank import RerankResult, load_cross_encoder, rerank
 from retrieval import HybridRetriever
 logging.basicConfig(level=logging.INFO, format='%(asctime)s  %(levelname)-8s  %(message)s', datefmt='%H:%M:%S')
 logger = logging.getLogger(__name__)
+# Configure provider order via a comma-separated list in env var QC_PROVIDER_ORDER
+# e.g., "gemini,openai" tries Gemini first, then OpenAI GPT-4o-mini if Gemini fails.
+PROVIDER_ORDER_ENV: str = os.getenv('QC_PROVIDER_ORDER', 'gemini,openai')
+PROVIDER_ORDER: list[str] = [p.strip().lower() for p in PROVIDER_ORDER_ENV.split(',') if p.strip()]
+
 LLM_PROVIDER: str = os.getenv('QC_LLM_PROVIDER', 'gemini')
 GEMINI_MODEL: str = os.getenv('QC_GEMINI_MODEL', 'gemini-2.5-flash-lite')
 OPENAI_MODEL: str = 'gpt-4o-mini'
@@ -36,33 +41,96 @@ class AnswerResponse:
     rewritten_query: str = ''
     top_chunks: list[RerankResult] = field(default_factory=list)
 
+class QuotaExhaustedError(Exception):
+    """Raised when the primary provider's daily quota is exhausted (RESOURCE_EXHAUSTED).
+    
+    We fail fast on daily quota exhaustion because retrying does not help,
+    unlike transient per-minute rate limits.
+    """
+    pass
+
 def _call_llm(system: str, user: str) -> str:
-    if LLM_PROVIDER == 'gemini':
-        return _call_gemini(system, user)
-    elif LLM_PROVIDER == 'openai':
-        return _call_openai(system, user)
-    else:
-        raise ValueError(f"Unknown LLM_PROVIDER: '{LLM_PROVIDER}'. Use 'gemini' or 'openai'.")
+    last_exc = None
+    attempted_providers = []
+    
+    for provider in PROVIDER_ORDER:
+        attempted_providers.append(provider)
+        logger.info("Attempting LLM generation using provider: '%s'", provider)
+        try:
+            if provider == 'gemini':
+                return _call_gemini(system, user)
+            elif provider == 'openai':
+                return _call_openai(system, user)
+            else:
+                raise ValueError(f"Unknown LLM provider: '{provider}'")
+        except QuotaExhaustedError as exc:
+            logger.warning("Gemini daily quota exhausted. Falling back to the next provider if available.")
+            last_exc = exc
+        except Exception as exc:
+            logger.warning("LLM provider '%s' failed: %s", provider, exc)
+            last_exc = exc
+            
+    # If all configured LLM providers fail
+    raise RuntimeError(
+        f"All configured LLM providers ({', '.join(attempted_providers)}) failed. "
+        f"Last error: {last_exc}"
+    ) from last_exc
 
 def _call_gemini(system: str, user: str) -> str:
     try:
         from google import genai
         from google.genai import types
+        from google.genai.errors import APIError
     except ImportError as exc:
         raise ImportError('google-genai is not installed. Run: pip install google-genai') from exc
     api_key = os.environ.get('GEMINI_API_KEY')
     if not api_key:
         raise EnvironmentError('GEMINI_API_KEY environment variable is not set. Get a key from https://aistudio.google.com/app/apikey')
-    client = genai.Client(api_key=api_key, http_options=types.HttpOptions(timeout=15000))
-    _BASE_DELAYS = [1.5, 4.0]
+    
+    # Cap timeout to 10 seconds (10000 ms) since Gemini API has a minimum allowed deadline of 10s.
+    client = genai.Client(api_key=api_key, http_options=types.HttpOptions(timeout=10000))
+    # Cap retry backoff delays to 1.0s and 2.0s to ensure chat UI is responsive.
+    _BASE_DELAYS = [1.0, 2.0]
     last_exc = None
     for attempt, base_delay in enumerate([None] + _BASE_DELAYS, start=1):
         if base_delay is not None:
             time.sleep(base_delay)
         try:
-            response = client.models.generate_content(model=GEMINI_MODEL, contents=user, config=types.GenerateContentConfig(system_instruction=system, temperature=0.0))
+            response = client.models.generate_content(
+                model=GEMINI_MODEL, 
+                contents=user, 
+                config=types.GenerateContentConfig(system_instruction=system, temperature=0.0)
+            )
             return response.text
         except Exception as exc:
+            # Check if this is a daily quota exhaustion error (RESOURCE_EXHAUSTED with PerDay or per day)
+            is_daily_quota = False
+            from google.genai.errors import APIError
+            if isinstance(exc, APIError):
+                status_str = getattr(exc, 'status', '') or ''
+                message_str = getattr(exc, 'message', '') or ''
+                details_str = str(getattr(exc, 'details', ''))
+                if status_str == 'RESOURCE_EXHAUSTED' and (
+                    'perday' in details_str.lower() or 
+                    'per day' in details_str.lower() or
+                    'perday' in message_str.lower() or 
+                    'per day' in message_str.lower() or
+                    'perday' in str(exc).lower() or
+                    'per day' in str(exc).lower()
+                ):
+                    is_daily_quota = True
+            else:
+                exc_str = str(exc)
+                if 'RESOURCE_EXHAUSTED' in exc_str and (
+                    'perday' in exc_str.lower() or 
+                    'per day' in exc_str.lower()
+                ):
+                    is_daily_quota = True
+            
+            if is_daily_quota:
+                logger.error("Gemini daily quota exhausted (RESOURCE_EXHAUSTED). Failing fast.")
+                raise QuotaExhaustedError("Gemini daily quota exhausted.") from exc
+                
             logger.warning('Gemini API call failed (attempt %d/3): %s. Retrying...', attempt, exc)
             last_exc = exc
             continue
@@ -76,8 +144,13 @@ def _call_openai(system: str, user: str) -> str:
     api_key = os.environ.get('OPENAI_API_KEY')
     if not api_key:
         raise EnvironmentError('OPENAI_API_KEY environment variable is not set.')
-    client = OpenAI(api_key=api_key)
-    resp = client.chat.completions.create(model=OPENAI_MODEL, messages=[{'role': 'system', 'content': system}, {'role': 'user', 'content': user}], temperature=0.0)
+    # Using 10s timeout for OpenAI fallback to keep it responsive
+    client = OpenAI(api_key=api_key, timeout=10.0)
+    resp = client.chat.completions.create(
+        model=OPENAI_MODEL, 
+        messages=[{'role': 'system', 'content': system}, {'role': 'user', 'content': user}], 
+        temperature=0.0
+    )
     return resp.choices[0].message.content or ''
 _REWRITE_SYSTEM = textwrap.dedent('    You are a query rewriting assistant.  Your ONLY job is to rewrite the\n    user\'s latest message into a fully self-contained question that can be\n    understood without any prior conversation context.\n\n    Rules:\n    - Replace pronouns and references (e.g., "it", "that plan", "the same\n      thing") with their explicit referents from the conversation history.\n    - Do NOT answer the question.  Only rewrite it.\n    - If the message is already self-contained, return it unchanged.\n    - Output ONLY the rewritten question -- no preamble, no explanation.\n')
 

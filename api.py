@@ -15,7 +15,7 @@ from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
-from generate import AnswerResponse, answer_query
+from generate import AnswerResponse, answer_query, QuotaExhaustedError
 from rerank import load_cross_encoder
 from retrieval import HybridRetriever
 logging.basicConfig(level=logging.INFO, format='%(asctime)s  %(levelname)-8s  %(name)s  %(message)s', datefmt='%H:%M:%S')
@@ -40,9 +40,19 @@ def _init_db() -> None:
     conn.commit()
     conn.close()
 
-def _log_request(session_id: str, query: str, latency_ms: float, escalated: bool, rerank_score: float) -> None:
+def _log_request(session_id: str, query: str, latency_ms: float, escalated: bool, rerank_score: float, outcome: str | None = None) -> None:
     ts = datetime.now(timezone.utc).isoformat()
-    row = {'ts': ts, 'session_id': session_id, 'query': query, 'latency_ms': round(latency_ms, 1), 'escalated': escalated, 'rerank_score': round(rerank_score, 4)}
+    if outcome is None:
+        outcome = 'escalated' if escalated else 'generation_success'
+    row = {
+        'ts': ts,
+        'session_id': session_id,
+        'query': query,
+        'latency_ms': round(latency_ms, 1),
+        'escalated': escalated,
+        'rerank_score': round(rerank_score, 4),
+        'outcome': outcome
+    }
     with LOG_FILE.open('a', encoding='utf-8') as f:
         f.write(json.dumps(row) + '\n')
     try:
@@ -93,7 +103,7 @@ class HealthResponse(BaseModel):
     models_loaded: bool
 
 @app.post('/chat', response_model=ChatResponse, summary='Ask a support question')
-async def chat(req: ChatRequest, request: Request) -> ChatResponse:
+async def chat(req: ChatRequest, request: Request) -> Any:
     sid = req.session_id or str(uuid.uuid4())
     if sid not in SESSION_STORE:
         SESSION_STORE[sid] = req.conversation_history or []
@@ -101,18 +111,37 @@ async def chat(req: ChatRequest, request: Request) -> ChatResponse:
     t0 = time.perf_counter()
     try:
         result: AnswerResponse = answer_query(query=req.query, retriever=request.app.state.retriever, ce_model=request.app.state.ce_model, conversation_history=history if history else None)
-    except Exception as exc:
-        logger.exception("Pipeline error for query '%s': %s", req.query[:80], exc)
+    except QuotaExhaustedError as exc:
         latency_ms = (time.perf_counter() - t0) * 1000
-        _log_request(sid, req.query, latency_ms, escalated=True, rerank_score=-99.0)
-        return ChatResponse(answer=f"I'm sorry, something went wrong on our end while processing your request. Please try again in a moment, or contact our support team directly at {_SUPPORT_CONTACT}.", sources=[], escalated=True, session_id=sid)
+        logger.error("Outcome: generation_failed | error=QuotaExhaustedError | session=%s  latency=%.0fms", sid[:8], latency_ms)
+        _log_request(sid, req.query, latency_ms, escalated=False, rerank_score=-99.0, outcome='generation_failed')
+        return JSONResponse(
+            status_code=503,
+            content={
+                "error": "generation_unavailable",
+                "message": "Our AI service is temporarily busy due to daily quota limits. Please try again in a moment."
+            }
+        )
+    except Exception as exc:
+        latency_ms = (time.perf_counter() - t0) * 1000
+        logger.error("Outcome: generation_failed | error=%s | session=%s  latency=%.0fms", str(exc), sid[:8], latency_ms)
+        _log_request(sid, req.query, latency_ms, escalated=False, rerank_score=-99.0, outcome='generation_failed')
+        return JSONResponse(
+            status_code=503,
+            content={
+                "error": "generation_unavailable",
+                "message": "Our AI service is temporarily busy, please try again in a moment."
+            }
+        )
     latency_ms = (time.perf_counter() - t0) * 1000
     history.append({'role': 'user', 'content': req.query})
     history.append({'role': 'assistant', 'content': result.answer})
     if len(history) > MAX_HISTORY_TURNS * 2:
         SESSION_STORE[sid] = history[-(MAX_HISTORY_TURNS * 2):]
-    _log_request(sid, req.query, latency_ms, result.escalated, result.rerank_score)
-    logger.info('session=%s  latency=%.0fms  escalated=%s  score=%.3f', sid[:8], latency_ms, result.escalated, result.rerank_score)
+    
+    outcome = 'escalated' if result.escalated else 'generation_success'
+    _log_request(sid, req.query, latency_ms, result.escalated, result.rerank_score, outcome=outcome)
+    logger.info("Outcome: %s | session=%s  latency=%.0fms  score=%.3f", outcome, sid[:8], latency_ms, result.rerank_score)
     sources = [SourceItem(article_id='', title=t) for t in result.sources]
     return ChatResponse(answer=result.answer, sources=sources, escalated=result.escalated, session_id=sid)
 
